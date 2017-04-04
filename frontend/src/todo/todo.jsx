@@ -13,7 +13,6 @@ export default class Todo extends Component {
 
         this.handleAdd = this.handleAdd.bind(this)
         this.handleSearch = this.handleSearch.bind(this)
-        this.handleChange = this.handleChange.bind(this)
         this.handleClear = this.handleClear.bind(this)
 
         this.handleRemove = this.handleRemove.bind(this)
@@ -35,10 +34,6 @@ export default class Todo extends Component {
         const description = this.state.description
 
         Axios.post(URL, { description }).then(resp => this.refresh())
-    }
-
-    handleChange(event) {
-        this.setState({ ...this.state, description: event.target.value })
     }
 
     handleSearch() {
@@ -65,7 +60,7 @@ export default class Todo extends Component {
         return (
             <div>
                 <PageHeader name="Tarefas" small="Cadastro" />
-                <TodoForm description={this.state.description} handleAdd={this.handleAdd} handleChange={this.handleChange} handleSearch={this.handleSearch} handleClear={this.handleClear} />
+                <TodoForm description={this.state.description} handleAdd={this.handleAdd} handleSearch={this.handleSearch} handleClear={this.handleClear} />
                 <TodoList list={this.state.list} handleRemove={this.handleRemove} handleMarkAsDone={this.handleMarkAsDone} handleMarkAsPending={this.handleMarkAsPending} />
             </div>
         )
