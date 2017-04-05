@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import IconButton from '../template/iconButton'
-import { changeDescription, search } from './todoActions'
+import { add, changeDescription, clear, search } from './todoActions'
 
 class TodoForm extends Component {
     constructor(props) {
@@ -17,23 +17,30 @@ class TodoForm extends Component {
 
     // This method is used to create some keyboard shortcuts to search, add and clear methods.
     keyHandler(event) {
-        if(event.key == 'Enter') {
-            event.shiftKey ? this.props.handleSearch() : this.props.handleAdd()
-        } else if(event.key == 'Escape') {
-            props.handleClear()
+        const { search, add, clear, description } = this.props
+
+        if(description)
+        {
+            if(event.key == 'Enter') {
+                event.shiftKey ? search() : add(description)
+            } else if(event.key == 'Escape') {
+                clear()
+            }
         }
     }
 
     render() {
+        const { search, add, changeDescription, clear, description } = this.props
+
         return (
             <div role="form" className="todoForm">
                 <div className="col-xs-10">
-                    <input type="text" id="description" className="form-control" placeholder="Add task" value={this.props.description} onChange={this.props.changeDescription} onKeyUp={this.keyHandler} />
+                    <input type="text" id="description" className="form-control" placeholder="Add task" value={description} onChange={changeDescription} onKeyUp={this.keyHandler} />
                 </div>
                 <div className="col-xs-2 text-right">
-                    <IconButton style="primary" icon="plus" onClick={this.props.handleAdd}></IconButton>
-                    <IconButton style="info" icon="search" onClick={this.props.handleSearch}></IconButton>
-                    <IconButton style="deafult" icon="close" onClick={this.props.handleClear}></IconButton>
+                    <IconButton style="primary" icon="plus" onClick={() => add(description)}></IconButton>
+                    <IconButton style="info" icon="search" onClick={search}></IconButton>
+                    <IconButton style="deafult" icon="close" onClick={clear}></IconButton>
                 </div>
             </div>
         )
@@ -44,6 +51,6 @@ class TodoForm extends Component {
 const mapStateToProps = state => ({ description: state.todo.description })
 
 // Bind the actions with the reducers.
-const mapDispatchToProps = dispatch => bindActionCreators({ changeDescription, search }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ add, changeDescription, clear, search }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoForm)
